@@ -1,14 +1,12 @@
 // ============ 登录 / 注册（对接 FastAPI 后端） ============
-const baseUrl = 'https://api.searchend.top'
-// 登录/注册成功后返回主页面
-const LOGIN_REDIRECT = '../主页面/index.html'
-
+const baseUrl = 'http://118.126.65.238:8000'
+// 登录/注册成功后返回主页面，主页面index.html在网站根目录
+const LOGIN_REDIRECT = '/index.html'
 const signInBtn = document.getElementById('signIn')
 const signUpBtn = document.getElementById('signUp')
 const firstForm = document.getElementById('form1')
 const secondForm = document.getElementById('form2')
 const container = document.querySelector('.container')
-
 // 面板切换
 signInBtn.addEventListener('click', () => {
     container.classList.remove('right-panel-active')
@@ -16,15 +14,12 @@ signInBtn.addEventListener('click', () => {
 signUpBtn.addEventListener('click', () => {
     container.classList.add('right-panel-active')
 })
-
 // ============ 工具函数 ============
-
 function setMsg(id, text, type = 'error') {
     const el = document.getElementById(id)
     el.textContent = text || ''
     el.className = 'form-msg' + (type === 'success' ? ' success' : '')
 }
-
 function setLoading(btn, loading, text) {
     btn.disabled = loading
     if (loading) {
@@ -34,7 +29,6 @@ function setLoading(btn, loading, text) {
         btn.textContent = btn.dataset.originText || text
     }
 }
-
 async function api(url, body) {
     let res
     try {
@@ -48,7 +42,6 @@ async function api(url, body) {
     }
     return res.json().catch(() => ({ code: -1, msg: `请求失败（${res.status}）` }))
 }
-
 // 登录：保存 token 到 localStorage
 async function login(username, password) {
     const data = await api(`${baseUrl}/auth/login`, { username, password })
@@ -59,7 +52,6 @@ async function login(username, password) {
     localStorage.setItem('user_id', data.data.user_id)
     localStorage.setItem('username', data.data.username)
 }
-
 // ============ 登录提交 ============
 secondForm.addEventListener('submit', async (e) => {
     e.preventDefault()
@@ -80,7 +72,6 @@ secondForm.addEventListener('submit', async (e) => {
         setLoading(btn, false, 'Sign In')
     }
 })
-
 // ============ 注册提交：注册成功后自动登录并跳转主页面 ============
 firstForm.addEventListener('submit', async (e) => {
     e.preventDefault()
