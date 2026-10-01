@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>候选人管理系统</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- 顶部导航与主页面统一 -->
+<header class="site-header">
+    <div class="site-header-inner">
+        <a class="site-logo" href="../主页面/index.html">SEARCHEND</a>
+        <nav class="site-nav">
+            <a href="../主页面/index.html">首页</a>
+            <a href="#">关于</a>
+            <a href="#">联系我们</a>
+        </nav>
+        <a class="btn-back" href="../主页面/index.html">← 返回主页面</a>
+    </div>
+</header>
+<div class="container">
+    <h1>候选人管理系统</h1>
+
+    <!-- Tab 导航 -->
+    <div class="tabs">
+        <button class="tab-item active" data-tab="candidate">候选人管理</button>
+        <button class="tab-item" data-tab="audit">操作日志</button>
+    </div>
+
+    <!-- ============ 候选人管理 ============ -->
+    <section class="tab-panel active" id="panel-candidate">
+        <div class="card">
+            <h3>候选人筛选</h3>
+            <form id="candidateFilterForm" class="form-grid" autocomplete="off">
+                <label class="field">姓名
+                    <input name="name" placeholder="姓名模糊查询">
+                </label>
+                <label class="field">学历
+                    <select name="education">
+                        <option value="">全部</option>
+                        <option value="大专">大专</option>
+                        <option value="本科">本科</option>
+                        <option value="硕士">硕士</option>
+                        <option value="博士">博士</option>
+                    </select>
+                </label>
+                <label class="field">专业
+                    <input name="major" placeholder="专业模糊查询">
+                </label>
+                <label class="field">性别
+                    <select name="gender">
+                        <option value="">全部</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                    </select>
+                </label>
+                <label class="field">关键字
+                    <input name="keyword" placeholder="姓名/技能/项目经验">
+                </label>
+                <div class="field-actions">
+                    <button type="submit" class="btn-primary">查询</button>
+                    <button type="button" class="btn-default" id="btnResetCandidate">重置</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <h3>候选人列表 <span class="count-tip" id="candidateCount"></span></h3>
+                <button class="btn-primary" id="btnAddCandidate">+ 新增候选人</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>联系方式</th>
+                            <th>学历</th>
+                            <th>专业</th>
+                            <th>工作年限</th>
+                            <th>技能</th>
+                            <th style="width:180px">创建时间</th>
+                            <th style="width:200px">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="candidateTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 操作日志 ============ -->
+    <section class="tab-panel" id="panel-audit">
+        <div class="card">
+            <h3>日志筛选</h3>
+            <form id="auditFilterForm" class="form-grid" autocomplete="off">
+                <label class="field">操作类型
+                    <input name="operate_type" placeholder="如：新增、删除">
+                </label>
+                <label class="field">结果
+                    <select name="result">
+                        <option value="">全部</option>
+                        <option value="成功">成功</option>
+                        <option value="失败">失败</option>
+                    </select>
+                </label>
+                <div class="field-actions">
+                    <button type="submit" class="btn-primary">查询</button>
+                    <button type="button" class="btn-default" id="btnResetAudit">重置</button>
+                </div>
+            </form>
+        </div>
+        <div class="card">
+            <div class="card-head">
+                <h3>操作审计日志 <span class="count-tip" id="auditCount"></span></h3>
+                <button class="btn-default" id="btnRefreshLog">刷新日志</button>
+            </div>
+            <div id="auditLog"></div>
+        </div>
+    </section>
+</div>
+
+<!-- ============ 候选人 新增/编辑 弹窗 ============ -->
+<div class="modal-overlay" id="candidateModal" hidden>
+    <div class="modal">
+        <div class="modal-header">
+            <span id="candidateModalTitle">新增候选人</span>
+            <span class="modal-close" data-close="candidateModal">×</span>
+        </div>
+        <form id="candidateForm" class="modal-body form-grid" autocomplete="off">
+            <input type="hidden" name="id">
+            <label class="field">姓名 <em>*</em>
+                <input name="name" required maxlength="50">
+            </label>
+            <label class="field">性别 <em>*</em>
+                <select name="gender" required>
+                    <option value="">请选择</option>
+                    <option value="男">男</option>
+                    <option value="女">女</option>
+                </select>
+            </label>
+            <label class="field">联系方式
+                <input name="phone" maxlength="15">
+            </label>
+            <label class="field">学历
+                <input name="education" maxlength="50">
+            </label>
+            <label class="field">学校
+                <input name="school" maxlength="200">
+            </label>
+            <label class="field">专业
+                <input name="major" maxlength="200">
+            </label>
+            <label class="field">工作年限
+                <input name="work_years" type="number" min="0" step="0.5">
+            </label>
+            <label class="field">期望薪资
+                <input name="expected_salary" maxlength="100">
+            </label>
+            <label class="field field-full">技能
+                <input name="skills" placeholder="如：Python,SQL,FastAPI">
+            </label>
+            <label class="field field-full">项目经验
+                <textarea name="project_exp" rows="3"></textarea>
+            </label>
+            <label class="field field-full">简历文件路径
+                <input name="resume_file_path" maxlength="500">
+            </label>
+            <div class="modal-footer">
+                <button type="button" class="btn-default" data-close="candidateModal">取消</button>
+                <button type="submit" class="btn-primary">确认提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ============ 候选人详情 弹窗 ============ -->
+<div class="modal-overlay" id="detailModal" hidden>
+    <div class="modal" style="max-width:680px">
+        <div class="modal-header">
+            <span>候选人详情</span>
+            <span class="modal-close" data-close="detailModal">×</span>
+        </div>
+        <div class="modal-body" id="detailBody"></div>
+        <div class="modal-footer">
+            <button type="button" class="btn-default" data-close="detailModal">关闭</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+<script src="js/api.js"></script>
+</body>
+</html>
