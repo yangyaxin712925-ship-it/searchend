@@ -1,5 +1,5 @@
 // ============ 登录 / 注册（对接 FastAPI 后端） ============
-const baseUrl = 'http://118.126.65.238:8000'
+const baseUrl = 'https://api.searchend.top'
 // 登录/注册成功后返回主页面
 const LOGIN_REDIRECT = '../主页面/index.html'
 
